@@ -127,35 +127,62 @@ Analyze this pull request:
 
 {pr_data}
 
-Return ONLY valid JSON in exactly this format:
-
-{{
-    "risk_score": 0,
-    "risk_level": "LOW",
-    "risk_factors": [],
-    "recommendation": ""
-}}
-
-Rules:
-- risk_score must be between 0 and 100
-- risk_level must be LOW, MEDIUM, or HIGH
-- risk_factors must be a list of strings
-- recommendation must be a string
-- Do not include markdown
-- Do not include ```json
+Return:
+- risk_score: integer from 0 to 100
+- risk_level: LOW, MEDIUM, or HIGH
+- risk_factors: list of strings
+- recommendation: string
 """
 
-    response = client.models.generate_content(
-    model="gemini-3.5-flash",
-    contents=prompt
-    )
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "risk_score": {
+                            "type": "INTEGER"
+                        },
+                        "risk_level": {
+                            "type": "STRING"
+                        },
+                        "risk_factors": {
+                            "type": "ARRAY",
+                            "items": {
+                                "type": "STRING"
+                            }
+                        },
+                        "recommendation": {
+                            "type": "STRING"
+                        }
+                    },
+                    "required": [
+                        "risk_score",
+                        "risk_level",
+                        "risk_factors",
+                        "recommendation"
+                    ]
+                }
+            }
+        )
 
-    text = response.text.strip()
+        return response.text.strip()
 
-    text = text.replace("```json", "")
-    text = text.replace("```", "")
+    except Exception as e:
+        error_message = str(e)
 
-    return text.strip()
+        if "429" in error_message or "RESOURCE_EXHAUSTED" in error_message:
+            raise Exception(
+                "Gemini API quota exceeded. Please use another Gemini API key "
+                "or wait for the quota to reset."
+            )
+
+        raise Exception(
+            f"Gemini API error: {error_message}"
+        )
 
 
 
