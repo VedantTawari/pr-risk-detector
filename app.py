@@ -339,6 +339,15 @@ for result in filtered_results:
         f"{result['title']} — "
         f"Score: {result['final_score']}"
     ):
+        pr_url = (
+            f"https://github.com/adagentpc-del/"
+            f"divini-procure/pull/{result['number']}"
+        )
+
+        st.link_button(
+            "🔗 View on GitHub",
+            pr_url
+        )
         st.subheader("📄 Pull Request Details")
 
         detail_col1, detail_col2, detail_col3, detail_col4 = st.columns(4)
