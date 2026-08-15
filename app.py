@@ -180,12 +180,24 @@ if st.button("🔍 Analyze PR"):
                 results.append(new_result)
 
 
+            try:
+                with open("results.json", "r", encoding="utf-8") as f:
+                    existing_results = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                existing_results = []
+
+            existing_results = [
+                r for r in existing_results
+                if r["number"] != new_result["number"]
+            ]
+
+            existing_results.append(new_result)
+
             with open("results.json", "w", encoding="utf-8") as f:
-                json.dump(
-                    results,
-                    f,
-                    indent=4
-                )
+                json.dump(existing_results, f, indent=4)
+
+            st.success("Analysis Complete!")
+            st.rerun()
 
 
             st.success("Analysis Complete!")
