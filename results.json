@@ -1,0 +1,24 @@
+[
+    {
+        "number": 14,
+        "title": "Bump typescript from 5.9.3 to 7.0.2",
+        "risk_score": 85,
+        "risk_level": "HIGH",
+        "risk_factors": [
+            "Major version upgrade of TypeScript (5.9.3 to 7.0.2) is highly likely to introduce breaking type-checking and compilation changes.",
+            "The lockfile (pnpm-lock.yaml) includes massive, unrelated modifications, including adding and upgrading several packages like @capacitor and react-router, which are not listed in the package.json diff.",
+            "Potential risk of dependency confusion or malicious package publishing, as TypeScript version 7.0.2 is ahead of the official release timeline."
+        ],
+        "recommendation": "Do not merge. Thoroughly inspect the lockfile changes to determine why unrelated packages are being updated. Verify the authenticity of the TypeScript 7.0.2 package, and run local clean builds and tests before proceeding.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 69,
+        "final_level": "MEDIUM"
+    }
+]
