@@ -127,7 +127,15 @@ if st.button("🔍 Analyze PR"):
 
             result = analyze_pr(pr)
 
-            data = json.loads(result)
+            if not result:
+                st.error("AI analysis failed. Please try again.")
+                st.stop()
+
+            try:
+                data = json.loads(result)
+            except json.JSONDecodeError:
+                st.error("AI returned an invalid response. Please try again.")
+                st.stop()
 
 
             rule_score, rule_factors = calculate_rule_score(pr)
