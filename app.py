@@ -43,8 +43,12 @@ avg_score = round(
     sum(r["final_score"] for r in results) / total_prs
 ) if total_prs else 0
 
+highest_risk_pr = max(
+    results,
+    key=lambda r: r["final_score"]
+) if results else None
 
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col1:
     st.metric("Total PRs", total_prs)
@@ -60,6 +64,16 @@ with col4:
 
 with col5:
     st.metric("Average Score", avg_score)
+
+with col6:
+    if highest_risk_pr:
+        st.metric(
+            "Highest Risk",
+            f"PR #{highest_risk_pr['number']}",
+            f"{highest_risk_pr['final_score']}/100"
+        )
+    else:
+        st.metric("Highest Risk", "N/A")
 
 
 st.divider()
