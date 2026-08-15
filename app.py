@@ -1,6 +1,11 @@
 import streamlit as st
 import json
-from analyzer import get_pull_request, analyze_pr, calculate_rule_score
+from analyzer import (
+    get_pull_request,
+    get_open_prs,
+    analyze_pr,
+    calculate_rule_score
+)
 
 st.set_page_config(
     page_title="PR Risk Detector",
@@ -97,7 +102,7 @@ with chart_col1:
 with chart_col2:
 
     score_data = {
-        f"PR #{r['number']}": r["final_score"]
+        f"{r['owner']}/{r['repo']} — PR #{r['number']}": r["final_score"]
         for r in results
     }
 
@@ -112,11 +117,45 @@ st.divider()
 
 st.subheader("Analyze a Pull Request")
 
-pr_number = st.number_input(
-    "Enter PR Number",
-    min_value=1,
-    step=1
+col1, col2 = st.columns(2)
+
+with col1:
+    owner = st.text_input(
+        "GitHub Owner",
+        value="adagentpc-del"
+    )
+
+with col2:
+    repo = st.text_input(
+        "Repository",
+        value="divini-procure"
+    )
+
+st.subheader("Select a Pull Request")
+
+try:
+    open_prs = get_open_prs(
+        owner.strip(),
+        repo.strip()
+    )
+except Exception:
+    open_prs = []
+
+if not open_prs:
+    st.info("No open Pull Requests found for this repository.")
+    st.stop()
+
+pr_options = {
+    f"PR #{pr['number']} — {pr['title']}": pr["number"]
+    for pr in open_prs
+}
+
+selected_pr = st.selectbox(
+    "Choose a Pull Request",
+    list(pr_options.keys())
 )
+
+pr_number = pr_options[selected_pr]
 
 
 if st.button("🔍 Analyze PR"):
@@ -125,17 +164,19 @@ if st.button("🔍 Analyze PR"):
 
         try:
 
-            owner = "adagentpc-del"
-            repo = "divini-procure"
 
             pr = get_pull_request(
-                owner,
-                repo,
+                owner.strip(),
+                repo.strip(),
                 int(pr_number)
             )
 
             if pr is None:
-                st.error("Pull Request not found or GitHub API request failed.")
+                st.error("❌ Pull Request not found")
+                st.info(
+                    "Please check the GitHub Owner, Repository name, "
+                    "and Pull Request number."
+                )
                 st.stop()
 
 
@@ -170,6 +211,8 @@ if st.button("🔍 Analyze PR"):
 
 
             new_result = {
+                "owner": owner.strip(),
+                "repo": repo.strip(),
                 "number": int(pr_number),
                 "title": pr["title"],
                 "author": pr["author"],
@@ -191,10 +234,13 @@ if st.button("🔍 Analyze PR"):
             existing_index = None
 
             for i, r in enumerate(results):
-                if r["number"] == int(pr_number):
+                if (
+                    r["owner"] == owner.strip()
+                    and r["repo"] == repo.strip()
+                    and r["number"] == int(pr_number)
+                ):
                     existing_index = i
                     break
-
 
             if existing_index is not None:
                 results[existing_index] = new_result
@@ -210,7 +256,11 @@ if st.button("🔍 Analyze PR"):
 
             existing_results = [
                 r for r in existing_results
-                if r["number"] != new_result["number"]
+                if not (
+                    r.get("owner") == new_result["owner"]
+                    and r.get("repo") == new_result["repo"]
+                    and r["number"] == new_result["number"]
+                )
             ]
 
             existing_results.append(new_result)
@@ -354,8 +404,8 @@ for result in filtered_results:
         f"Score: {result['final_score']}"
     ):
         pr_url = (
-            f"https://github.com/adagentpc-del/"
-            f"divini-procure/pull/{result['number']}"
+            f"https://github.com/{result['owner']}/"
+            f"{result['repo']}/pull/{result['number']}"
         )
 
         st.link_button(
@@ -387,7 +437,7 @@ for result in filtered_results:
 
         st.write(
             f"🔗 [View PR #{result['number']} on GitHub]("
-            f"https://github.com/adagentpc-del/divini-procure/pull/{result['number']}"
+            f"https://github.com/{result['owner']}/{result['repo']}/pull/{result['number']}"
             f")"
         )
 

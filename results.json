@@ -1,21 +1,23 @@
 [
     {
-        "number": 14,
-        "title": "Bump typescript from 5.9.3 to 7.0.2",
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 18,
+        "title": "Bump @types/node from 20.19.43 to 26.2.0",
         "author": "dependabot[bot]",
         "state": "open",
         "changed_files": 3,
-        "additions": 5937,
-        "deletions": 498,
-        "risk_score": 75,
+        "additions": 5405,
+        "deletions": 500,
+        "risk_score": 85,
         "risk_level": "HIGH",
         "risk_factors": [
-            "Major version upgrade of TypeScript (from 5.x to 7.x) which brings breaking compiler changes",
-            "Major version upgrade of react-router-dom (from 6.x to 7.x) which introduces significant API and behavioral changes",
-            "Large-scale lockfile changes with over 5,900 additions, including the introduction of multiple Capacitor-related packages",
-            "Upgrading core build and routing dependencies simultaneously increases the risk of integration issues and build failures"
+            "The pull request contains massive, unrelated changes to the lockfile (pnpm-lock.yaml) that are not reflected in package.json.",
+            "Major dependency upgrades (such as React Router v7, Capacitor v8, and Electron v31) are being introduced silently via the lockfile.",
+            "The PR title and description are misleading, as they only indicate a bump to @types/node.",
+            "There is an extremely high risk of breaking changes and build failures due to uncoordinated major version updates to core frameworks."
         ],
-        "recommendation": "Avoid merging this automatically. Conduct thorough regression testing on application routing and state management due to the React Router v7 upgrade. Run a full type-check and build suite to ensure compatibility with TypeScript 7, and verify that the newly added Capacitor dependencies do not introduce runtime errors on target platforms.",
+        "recommendation": "Do not merge this PR in its current state. Reject or close this PR and investigate why the lockfile was regenerated with major upgrades. If you only intended to upgrade @types/node, revert the lockfile changes and regenerate it cleanly to avoid pulling in unrelated major upgrades.",
         "rule_score": 45,
         "rule_factors": [
             "Large code change",
@@ -24,7 +26,59 @@
             "Automated Dependabot update",
             "Large diff"
         ],
-        "final_score": 63,
+        "final_score": 69,
         "final_level": "MEDIUM"
+    },
+    {
+        "owner": "microsoft",
+        "repo": "MixedReality-QRCode-Sample",
+        "number": 18,
+        "title": "Diff between OpenXR QR sample vs. WinRT QR sample in Unity",
+        "author": "yl-msft",
+        "state": "open",
+        "changed_files": 13,
+        "additions": 876,
+        "deletions": 50,
+        "risk_score": 85,
+        "risk_level": "HIGH",
+        "risk_factors": [
+            "Explicit instruction in the PR description asking not to merge this PR into the main branch",
+            "Addition of a binary tarball package (com.microsoft.mixedreality.openxr-1.5.0.tgz) which cannot be easily inspected in the diff",
+            "Large volume of auto-generated Unity asset and meta configuration files",
+            "Truncated diff output limiting complete manual inspection"
+        ],
+        "recommendation": "Do not merge this pull request. The author has explicitly stated that this is for demonstration/comparison purposes only. Close the pull request or keep it as a draft for reference.",
+        "rule_score": 25,
+        "rule_factors": [
+            "Large number of files changed",
+            "Large diff"
+        ],
+        "final_score": 61,
+        "final_level": "MEDIUM"
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 2,
+        "title": "Bump actions/setup-node from 4 to 7",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 1,
+        "additions": 2,
+        "deletions": 2,
+        "risk_score": 25,
+        "risk_level": "LOW",
+        "risk_factors": [
+            "Major version upgrade of a GitHub Action (v4 to v7) which could introduce breaking changes to the CI/CD pipeline.",
+            "Changes are confined to the CI workflow file, posing no direct risk to the production application code."
+        ],
+        "recommendation": "Verify that the CI/CD pipeline runs successfully with the new version of setup-node. Review the release notes of v5, v6, and v7 of actions/setup-node to ensure compatibility with any custom caching or Node.js version configurations.",
+        "rule_score": 10,
+        "rule_factors": [
+            "Security-related change",
+            "Automated Dependabot update"
+        ],
+        "final_score": 19,
+        "final_level": "LOW"
     }
 ]
