@@ -1,116 +1,172 @@
-# 🔍 PR Risk Detector
+# PR Risk Detector
 
-An AI-powered Pull Request risk analysis tool that evaluates GitHub Pull Requests using a combination of AI analysis and rule-based risk detection.
+An AI-powered Pull Request Risk Analyzer that evaluates GitHub Pull Requests using rule-based scoring, Gemini AI, and Retrieval-Augmented Generation (RAG).
 
-## 🚀 Live Demo
+## Features
 
-https://pr-risk-detector.streamlit.app/
+- Fetch Pull Requests directly from GitHub
+- Analyze PR title, description, and code diff
+- Rule-based risk scoring
+- AI-based risk analysis using Gemini
+- RAG-based retrieval of similar historical Pull Requests
+- Gemini embeddings with ChromaDB
+- Combined final risk score
+- Risk levels: LOW, MEDIUM, HIGH
+- Risk factors and recommendations
+- Streamlit web interface
+- Automatically stores newly analyzed PRs in the RAG knowledge base
 
-## ✨ Features
+## Architecture
 
-- 🔗 Analyze Pull Requests directly from GitHub
-- 🤖 AI-powered risk analysis
-- 📊 Rule-based risk scoring
-- 🎯 Combined final risk score
-- 🔴🟠🟢 High / Medium / Low risk classification
-- 🔍 Risk factors and recommendations
-- 📈 Risk overview dashboard
-- 🔎 Search analyzed Pull Requests
-- 🏷️ Filter PRs by risk level
-- 🔗 Direct links to GitHub Pull Requests
-- 🌐 Supports different GitHub owners and repositories
-- 💾 Stores analyzed PR results
-
-## 🧠 How It Works
-
-The application follows this pipeline:
-
-GitHub Repository
-        ↓
-Pull Request Selection
-        ↓
 GitHub API
-        ↓
-AI Analysis + Rule-Based Analysis
-        ↓
-Risk Score Calculation
-        ↓
-Final Risk Level
-        ↓
-Dashboard
+↓
+Pull Request Data
+↓
+Rule Engine ─────────┐
+                     ↓
+                Final Risk Score
+                     ↑
+Gemini AI ← RAG Context
+    ↑                    ↑
+    │                ChromaDB
+    │                    ↑
+Gemini Embeddings ← Historical PRs
 
-## 📊 Risk Scoring
+## How It Works
 
-The final score combines two sources:
+### 1. Fetch Pull Request
 
-- AI Risk Score → 60%
-- Rule-Based Score → 40%
+The application uses the GitHub API to retrieve:
+
+- Pull Request title
+- Description
+- Author
+- Number of changed files
+- Additions
+- Deletions
+- Code diff
+
+### 2. Rule-Based Analysis
+
+The system checks factors such as:
+
+- Number of changed files
+- Size of code changes
+- Security-related changes
+- Bug fixes
+- Dependabot updates
+- Large diffs
+
+This produces a rule-based risk score.
+
+### 3. RAG Retrieval
+
+The PR title and description are converted into an embedding using Gemini's `gemini-embedding-001` model.
+
+ChromaDB searches the historical PR knowledge base and retrieves the most similar Pull Requests.
+
+### 4. AI Analysis
+
+Gemini analyzes the current Pull Request using:
+
+- PR information
+- Code diff
+- Similar historical Pull Requests
+
+It generates:
+
+- AI risk score
+- Risk level
+- Risk factors
+- Recommendation
+
+### 5. Final Risk Score
+
+The final score combines AI analysis and rule-based analysis:
+
+Final Score = 60% AI Score + 40% Rule Score
+
+Risk levels:
+
+- 0–39 → LOW
+- 40–69 → MEDIUM
+- 70–100 → HIGH
+
+### 6. Knowledge Base Update
+
+After a PR is analyzed, its result is converted into a document, embedded, and stored in ChromaDB.
+
+This allows future Pull Requests to use previously analyzed PRs as historical context.
+
+## Tech Stack
+
+- Python
+- Streamlit
+- GitHub REST API
+- Google Gemini API
+- Gemini Embeddings
+- ChromaDB
+- Requests
+- python-dotenv
+
+## Project Structure
 
 ```text
-Final Score = 0.6 × AI Score + 0.4 × Rule Score
+pr-risk-detector/
+│
+├── app.py
+├── analyzer.py
+├── rag.py
+├── results.json
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .env
+```
 
-| Score  | Risk Level |
-| ------ | ---------- |
-| 70–100 | HIGH       |
-| 40–69  | MEDIUM     |
-| 0–39   | LOW        |
-🛠️ Tech Stack
-Python
-Streamlit
-GitHub API
-Google Gemini API
-JSON
-Git & GitHub
-⚙️ Run Locally
-
-Clone the repository:
-
-git clone https://github.com/VedantTawari/pr-risk-detector.git
+1. Clone the repository
+git clone <your-repository-url>
 cd pr-risk-detector
-
-Create a virtual environment:
-
+2. Create virtual environment
 python -m venv .venv
 
 Activate it on Windows:
 
 .venv\Scripts\activate
-
-Install dependencies:
-
+3. Install dependencies
 pip install -r requirements.txt
+4. Configure environment variables
 
-Create a .env file and add the required API keys.
+Create a .env file:
 
-Run the application:
-
+GITHUB_TOKEN=your_github_token
+GEMINI_API_KEY=your_gemini_api_key
+5. Run the application
 streamlit run app.py
-📁 Project Structure
-pr-risk-detector/
-│
-├── app.py
-├── analyzer.py
-├── main.py
-├── results.json
-├── requirements.txt
-├── README.md
-├── .env
-└── .gitignore
-🎯 Why This Project?
 
-Code reviews are an important part of software development, but identifying potentially risky Pull Requests manually can be time-consuming.
+The application will open in your browser.
 
-PR Risk Detector helps developers quickly identify potentially risky changes by combining AI-based reasoning with deterministic rule-based checks.
+RAG Pipeline
+Historical PR
+     ↓
+Create Document
+     ↓
+Gemini Embedding
+     ↓
+ChromaDB
+     ↓
+Vector Search
+     ↑
+New PR → Query Embedding
 
-🔮 Future Improvements
+The system retrieves the most semantically similar historical Pull Requests rather than simply matching keywords.
+
+Future Improvements
 GitHub webhook integration
-Automatic PR analysis
-Historical risk trends
+Automatic PR monitoring
+CI/CD integration
+More advanced code-diff analysis
+Risk trend visualization
 Repository-level risk analytics
-More advanced code-change analysis
-Authentication and multi-user support
-👨‍💻 Author
-
-Vedant Tawari
-
-GitHub: https://github.com/VedantTawari
+Automated GitHub comments
+Multi-repository support

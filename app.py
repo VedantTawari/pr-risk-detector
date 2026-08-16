@@ -1,11 +1,14 @@
 import streamlit as st
 import json
+
 from analyzer import (
     get_pull_request,
     get_open_prs,
     analyze_pr,
     calculate_rule_score
 )
+
+from rag import retrieve_similar_prs, add_pr_to_knowledge_base
 
 st.set_page_config(
     page_title="PR Risk Detector",
@@ -179,6 +182,12 @@ if st.button("🔍 Analyze PR"):
                 )
                 st.stop()
 
+            similar_prs = retrieve_similar_prs(
+                pr["title"] + "\n" + (pr["body"] or ""),
+                k=3,
+                exclude_pr=int(pr_number)
+            )
+
 
             result = analyze_pr(pr)
 
@@ -227,9 +236,19 @@ if st.button("🔍 Analyze PR"):
                 "rule_score": rule_score,
                 "rule_factors": rule_factors,
                 "final_score": final_score,
-                "final_level": final_level
+                "final_level": final_level,
+                "similar_prs": [
+                    {
+                        "number": metadata.get("pr_number"),
+                        "title": metadata.get("title"),
+                        "score": metadata.get("final_score"),
+                        "level": metadata.get("final_level")
+                    }
+                    for metadata in similar_prs["metadatas"][0]
+                ]
             }
 
+            add_pr_to_knowledge_base(new_result)    
 
             existing_index = None
 
@@ -321,6 +340,21 @@ if st.button("🔍 Analyze PR"):
             st.subheader("💡 Recommendation")
 
             st.info(data["recommendation"])
+
+            st.subheader("🧠 Similar Historical PRs (RAG)")
+
+            if similar_prs["metadatas"]:
+                for metadata in similar_prs["metadatas"][0]:
+                    st.write(
+                        f"**PR #{metadata.get('pr_number')}** — "
+                        f"{metadata.get('title')}"
+                    )
+                    st.write(
+                        f"Risk Score: {metadata.get('final_score')}/100 "
+                        f"| Risk Level: {metadata.get('final_level')}"
+                    )
+            else:
+                st.info("No similar historical PRs found.")
 
 
         except json.JSONDecodeError:
@@ -493,3 +527,23 @@ for result in filtered_results:
         st.subheader("💡 Recommendation")
 
         st.info(result["recommendation"])
+
+        st.subheader("🧠 Similar Historical PRs (RAG)")
+
+        similar_history = result.get("similar_prs", [])
+
+        if similar_history:
+            for pr in similar_history:
+                st.write(
+                    f"**PR #{pr.get('number')}** — "
+                    f"{pr.get('title')}"
+                )
+
+                st.write(
+                    f"Risk Score: {pr.get('score')}/100 "
+                    f"| Risk Level: {pr.get('level')}"
+                )
+
+                st.divider()
+        else:
+            st.info("No similar historical PRs found.")

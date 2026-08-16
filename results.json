@@ -80,5 +80,317 @@
         ],
         "final_score": 19,
         "final_level": "LOW"
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 14,
+        "title": "Bump typescript from 5.9.3 to 7.0.2",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5937,
+        "deletions": 498,
+        "risk_score": 68,
+        "risk_level": "MEDIUM",
+        "risk_factors": [
+            "Major version upgrade of TypeScript (v5 to v7) which carries a high risk of breaking changes and compilation failures.",
+            "Significant unrelated dependency modifications found in the lockfiles (such as React Router 7 upgrade and Capacitor package additions) that are not mentioned in the PR description.",
+            "Large volume of changes with a truncated diff, making a complete manual security and integrity audit impossible.",
+            "Introduction of platform-specific optional binary dependencies for TypeScript, which is atypical and warrants supply-chain verification."
+        ],
+        "recommendation": "Do not merge this PR in its current state. Request a clean recreation of the PR to isolate the TypeScript upgrade from other unrelated package updates. Thoroughly review the unexpected additions of Capacitor and React Router v7 in the lockfile, and run comprehensive CI/CD tests to detect type-checking errors and runtime regressions.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 58,
+        "final_level": "MEDIUM"
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 7,
+        "title": "Bump pg and @types/pg in /server",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 2,
+        "additions": 18,
+        "deletions": 18,
+        "risk_score": 30,
+        "risk_level": "LOW",
+        "risk_factors": [
+            "Updates a critical database client library (pg) which can affect database connectivity and query execution.",
+            "Bumps across multiple minor versions (8.13.x to 8.23.x), which introduces several new features like query pipelining and updated SSL options.",
+            "Changes are strictly confined to package.json and package-lock.json, meaning no direct code logic is altered in this PR."
+        ],
+        "recommendation": "Review the dependency changelogs, especially regarding query pipelining and connection handling. Run integration tests and verify database connectivity in a staging environment before merging to production.",
+        "rule_score": 0,
+        "rule_factors": [
+            "Automated Dependabot update"
+        ],
+        "final_score": 18,
+        "final_level": "LOW"
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 11,
+        "title": "Bump wait-on from 7.2.0 to 9.1.0",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5455,
+        "deletions": 539,
+        "risk_score": 45,
+        "risk_level": "MEDIUM",
+        "risk_factors": [
+            "Major version upgrade of 'wait-on' from 7.2.0 to 9.1.0, which may introduce breaking changes.",
+            "Minimum Node.js version requirement for 'wait-on' (and some of its transitives like 'joi') is bumped to >=20.0.0, which will break builds on older Node.js runtimes.",
+            "Extremely large lockfile changes (over 5,400 additions) that include unexpected updates to unrelated critical dependencies like '@capacitor/*', 'react-router-dom', and 'i18next'."
+        ],
+        "recommendation": "Confirm that your local and CI/CD environments are running Node.js >= 20.0.0. Given the large and seemingly unrelated updates to Capacitor and React Router within the pnpm-lock.yaml file, run a comprehensive suite of integration and regression tests to ensure no breaking changes were introduced.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 45,
+        "final_level": "MEDIUM"
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 17,
+        "title": "Bump i18next from 26.3.5 to 26.3.6",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5372,
+        "deletions": 496,
+        "risk_score": 45,
+        "risk_level": "MEDIUM",
+        "risk_factors": [
+            "Unintended lockfile churn: `pnpm-lock.yaml` contains over 5,000 additions of unrelated dependencies (e.g., Capacitor, Electron, Vite) despite this being a simple patch bump for `i18next`.",
+            "Inconsistency between package managers: `package-lock.json` only reflects the `i18next` upgrade, whereas `pnpm-lock.yaml` introduces wide-ranging dependency changes.",
+            "Truncated diff output limits the ability to fully audit all lockfile updates manually."
+        ],
+        "recommendation": "Do not merge this PR as-is. Investigate why `pnpm-lock.yaml` has undergone a massive update. Regenerate the lockfiles cleanly to isolate the `i18next` upgrade, or thoroughly test the application to ensure that the updated Capacitor and Electron packages do not introduce breaking changes or security regressions.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 45,
+        "final_level": "MEDIUM",
+        "similar_prs": [
+            {
+                "number": 2,
+                "title": "Bump actions/setup-node from 4 to 7",
+                "score": 19,
+                "level": "LOW"
+            },
+            {
+                "number": 18,
+                "title": "Diff between OpenXR QR sample vs. WinRT QR sample in Unity",
+                "score": 61,
+                "level": "MEDIUM"
+            }
+        ]
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 16,
+        "title": "Bump react-i18next from 17.0.8 to 17.0.11",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5378,
+        "deletions": 511,
+        "risk_score": 28,
+        "risk_level": "LOW",
+        "risk_factors": [
+            "Transitive dependency 'html-parse-stringify' is upgraded across a major version (v3.0.1 to v4.0.1), which could alter the parsing of HTML-like tags in '<Trans>' translation components.",
+            "The lockfile 'pnpm-lock.yaml' contains a very large number of changes (over 5,000 additions) containing seemingly unrelated packages (such as '@capacitor/*' and 'electron'), suggesting a full lockfile regeneration or sync event occurred.",
+            "Automated dependency update by Dependabot requiring verification of runtime behavior."
+        ],
+        "recommendation": "Verify that the application builds and runs successfully. Pay close attention to the internationalization behavior, specifically components using the '<Trans>' tag, due to the major version change in the underlying parser. Additionally, ensure that the large volume of lockfile additions does not introduce unexpected packages into the production bundle.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 34,
+        "final_level": "LOW",
+        "similar_prs": [
+            {
+                "number": 2,
+                "title": "Bump actions/setup-node from 4 to 7",
+                "score": 19,
+                "level": "LOW"
+            },
+            {
+                "number": 18,
+                "title": "Diff between OpenXR QR sample vs. WinRT QR sample in Unity",
+                "score": 61,
+                "level": "MEDIUM"
+            }
+        ]
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 15,
+        "title": "Bump react, react-dom and @types/react",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5367,
+        "deletions": 536,
+        "risk_score": 75,
+        "risk_level": "HIGH",
+        "risk_factors": [
+            "Major version upgrade of core framework dependencies (React and React DOM from v18 to v19) which introduces breaking changes.",
+            "Potential compatibility issues with other project dependencies (like react-router-dom, react-i18next) that may not fully support React 19 yet.",
+            "Significant lockfile churn with over 5,000 additions, indicating a large number of transitive dependency updates.",
+            "Upgrade of @types/react to v19 which could cause widespread TypeScript compilation errors due to breaking type changes."
+        ],
+        "recommendation": "Perform exhaustive regression testing, both automated and manual, focusing on UI components, ref usage, and context. Run TypeScript type-checking to identify any compilation failures. Ensure all third-party React libraries in the project are officially compatible with React 19 before merging.",
+        "rule_score": 25,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 55,
+        "final_level": "MEDIUM",
+        "similar_prs": [
+            {
+                "number": 2,
+                "title": "Bump actions/setup-node from 4 to 7",
+                "score": 19,
+                "level": "LOW"
+            },
+            {
+                "number": 18,
+                "title": "Diff between OpenXR QR sample vs. WinRT QR sample in Unity",
+                "score": 61,
+                "level": "MEDIUM"
+            }
+        ]
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 13,
+        "title": "Bump @vitejs/plugin-react from 4.7.0 to 5.2.0",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5383,
+        "deletions": 507,
+        "risk_score": 60,
+        "risk_level": "MEDIUM",
+        "risk_factors": [
+            "Major version upgrade of @vitejs/plugin-react from v4 to v5 which can introduce breaking changes in the build process.",
+            "Stricter Node.js engine requirements introduced, requiring Node >= 20.19.0 or >= 22.12.0.",
+            "Unexpected and massive lockfile churn in pnpm-lock.yaml with over 5,000 additions, updating unrelated critical packages like Capacitor, Electron, and TypeScript."
+        ],
+        "recommendation": "Verify that all development and CI/CD environments are running a supported Node.js version (>= 20.19.0). Investigate the cause of the massive lockfile changes to ensure no unintended packages were upgraded. Perform thorough smoke testing of the build system and application runtime.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 54,
+        "final_level": "MEDIUM",
+        "similar_prs": [
+            {
+                "number": 15,
+                "title": "Bump react, react-dom and @types/react",
+                "score": 55,
+                "level": "MEDIUM"
+            },
+            {
+                "number": 2,
+                "title": "Bump actions/setup-node from 4 to 7",
+                "score": 19,
+                "level": "LOW"
+            },
+            {
+                "number": 18,
+                "title": "Diff between OpenXR QR sample vs. WinRT QR sample in Unity",
+                "score": 61,
+                "level": "MEDIUM"
+            }
+        ]
+    },
+    {
+        "owner": "adagentpc-del",
+        "repo": "divini-procure",
+        "number": 12,
+        "title": "Bump concurrently from 8.2.2 to 10.0.4",
+        "author": "dependabot[bot]",
+        "state": "open",
+        "changed_files": 3,
+        "additions": 5548,
+        "deletions": 575,
+        "risk_score": 58,
+        "risk_level": "MEDIUM",
+        "risk_factors": [
+            "Major version upgrade of concurrently (v8.2.2 to v10.0.4) which introduces breaking changes.",
+            "Stricter Node.js engine requirement introduced, requiring Node.js >= 22.",
+            "Massive, unexpected lockfile churn in pnpm-lock.yaml with over 5,000 additions, updating unrelated critical packages like Capacitor, Electron, TypeScript, and React Router.",
+            "Removal of deprecated CLI flags and options (such as --name-separator and killOthers) which might be utilized in the project's npm/pnpm scripts."
+        ],
+        "recommendation": "Ensure that all development and CI/CD environments are updated to Node.js >= 22. Check the project's package.json scripts to verify that no deprecated concurrently flags are used. Thoroughly review the lockfile changes to prevent unintended side-effects from the upgraded transitive dependencies, and run a full build and test suite.",
+        "rule_score": 45,
+        "rule_factors": [
+            "Large code change",
+            "Extremely large code change",
+            "Security-related change",
+            "Automated Dependabot update",
+            "Large diff"
+        ],
+        "final_score": 52,
+        "final_level": "MEDIUM",
+        "similar_prs": [
+            {
+                "number": 15,
+                "title": "Bump react, react-dom and @types/react",
+                "score": 55,
+                "level": "MEDIUM"
+            },
+            {
+                "number": 13,
+                "title": "Bump @vitejs/plugin-react from 4.7.0 to 5.2.0",
+                "score": 54,
+                "level": "MEDIUM"
+            },
+            {
+                "number": 2,
+                "title": "Bump actions/setup-node from 4 to 7",
+                "score": 19,
+                "level": "LOW"
+            }
+        ]
     }
 ]

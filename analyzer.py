@@ -3,7 +3,7 @@ import json
 import requests
 from google import genai
 from dotenv import load_dotenv
-
+from rag import retrieve_similar_prs
 load_dotenv()
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
@@ -42,6 +42,7 @@ def get_pull_request(owner, repo, pr_number):
         diff = diff[:MAX_DIFF_LENGTH] + "\n\n[DIFF TRUNCATED]"
 
     return {
+    "number": data["number"],
     "title": data["title"],
     "body": data["body"],
     "state": data["state"],
@@ -119,20 +120,39 @@ def calculate_rule_score(pr):
     return score, factors
 
 
+
 def analyze_pr(pr_data):
+    similar_prs = retrieve_similar_prs(
+        pr_data["title"] + "\n" + pr_data["body"],
+        k=3,
+        exclude_pr=pr_data["number"]
+    )
+
+    rag_context = "\n\n".join(
+        similar_prs["documents"][0]
+    )
+
+
     prompt = f"""
-You are a Pull Request Risk Analyzer.
+        You are a Pull Request Risk Analyzer.
 
-Analyze this pull request:
+        Analyze this pull request:
 
-{pr_data}
+        {pr_data}
 
-Return:
-- risk_score: integer from 0 to 100
-- risk_level: LOW, MEDIUM, or HIGH
-- risk_factors: list of strings
-- recommendation: string
-"""
+        Here are similar historical pull requests from the RAG knowledge base:
+
+        {rag_context}
+
+        Use the historical PRs as additional context when judging the risk.
+        Do not blindly copy their scores.
+
+        Return:
+        - risk_score: integer from 0 to 100
+        - risk_level: LOW, MEDIUM, or HIGH
+        - risk_factors: list of strings
+        - recommendation: string
+        """
 
     try:
         response = client.models.generate_content(
